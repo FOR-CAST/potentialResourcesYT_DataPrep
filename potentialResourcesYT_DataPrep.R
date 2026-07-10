@@ -17,11 +17,12 @@ defineModule(sim, list(
                        "built-in defaults still reference the original NWT sample ",
                        "data; the pipeline supplies Yukon inputs."),
   keywords = "",
-  authors = structure(list(list(given = "Tati", 
-                                family = "Micheletti", role = c("aut", "cre"), 
-                                email = "tati.micheletti@gmail.com", 
-                                comment = NULL)), 
-                      class = "person"),  
+  authors = c(
+    person(given = "Tati", family = "Micheletti", role = "aut",
+           email = "tati.micheletti@gmail.com"),
+    person(given = "Alex M.", family = "Chubaty", role = c("aut", "cre"),
+           email = "achubaty@for-cast.ca")
+  ),  
   childModules = character(0),
   version = list(potentialResourcesYT_DataPrep = "1.0.0"),
   timeframe = as.POSIXlt(c(NA, NA)),
