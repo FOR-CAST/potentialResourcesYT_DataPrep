@@ -1,131 +1,117 @@
 ---
-title: "potentialResourcesYT_DataPrep"
-author: "Tati Micheletti"
-date: "27 June 2022"
+title: "potentialResourcesYT_DataPrep Manual"
+subtitle: "v.`r SpaDES.core::moduleMetadata(module = 'potentialResourcesYT_DataPrep', path = '..')$version`"
+date: "Last updated: `r Sys.Date()`"
 output:
-  pdf_document: default
-  html_document:
-    keep_md: yes
+  github_document:
+    toc: true
+    toc_depth: 4
+    html_preview: false
 editor_options:
   chunk_output_type: console
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, eval = FALSE, results = "hold")
+# potentialResourcesYT_DataPrep Module
+
+```{r setup-potentialResourcesYT_DataPrep, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE, eval = FALSE, results = "hold") ## change to eval = TRUE if all chunks are to be evaluated
+
+dir.create("figures", showWarnings = FALSE)
+
+download.file(url = "https://img.shields.io/badge/Made%20with-Markdown-1f425f.png",
+              destfile = "figures/markdownBadge.png",
+              mode = "wb", quiet = TRUE)
 ```
 
-# Version 1.0.0
+[![made-with-Markdown](figures/markdownBadge.png)](https://commonmark.org)
 
-# Overview
+#### Authors:
 
-This is a data preparation module to harmonize different anthropogenic disturbance datasets, more specifically, mining, oil and gas, seismic lines and cutblocks. It's intended for the Northwest Territories region (default) and is idiosyncratic.This means this module is NOT generalizable, but can be used as basis for other types of development. The objective is to create one standardized layer for each of the potential resources that has increasing values for most prioritized places (i.e., higher values, more likely structures will appear).
+`r paste(as.character(SpaDES.core::moduleMetadata(module = "potentialResourcesYT_DataPrep", path = "..")$authors), sep = ", ")`
 
-# Usage
+## Module Overview
 
-```{r module_usage}
-if(!require("Require")){
-    install.packages("Require")
-}
-library("Require")
-Require("googledrive")
-Require("SpaDES.core")
+### Module summary
 
-# Pass your email for authentication (used for non-interactive calls)
-googledrive::drive_auth(email = "tati.micheletti@gmail.com")
-options(reproducible.useTerra = FALSE) # Workaround while reproducible is not yet fully functional with terra
+This is a data-preparation module that harmonizes anthropogenic disturbance
+datasets -- specifically mining, oil/gas, seismic lines, and cutblocks -- into
+standardized "potential" layers, where higher values flag the places most likely
+to see future development first.
 
-# If you load the project, set the directory where your modules are located 
-moduleDir <- dirname(getwd())
-  
-setPaths(modulePath = moduleDir,
-         cachePath = checkPath(file.path(getwd(), "cache"), 
-                               create = TRUE), 
-         outputPath = checkPath(file.path(getwd(), "outputs"), 
-                               create = TRUE),
-         inputPath = checkPath(file.path(getwd(), "inputs"), 
-                               create = TRUE),
-         rasterPath = checkPath(file.path(getwd(), "temp_raster"), 
-                               create = TRUE))
+The approach is idiosyncratic and NOT generalizable, but can serve as a basis for
+other development types. It was originally developed for the Northwest Territories
+by Tati Micheletti; this is the FOR-CAST fork used in the Yukon Northern Mountain
+Caribou project. The built-in defaults still reference the original NWT sample
+data (union of BCR6 and NT1); the pipeline supplies Yukon inputs.
 
-getPaths() # shows where the 4 relevant paths are
+### Module inputs and parameters
 
-times <- list(start = 2011, end = 2011)
+The module expects three inputs: `disturbanceList` (from
+`anthroDisturbance_DataPrep`), the study area (`studyArea`), and the matching
+raster (`rasterToMatch`). In `disturbanceList`, the outer list names are
+`dataName` and the inner list names are `dataClass` from `disturbanceDT`.
 
-parameters <- list(
-  #.progress = list(type = "text", interval = 1), # for a progress bar
-  # Default values, don't need to be passed but are here as examples
-  potentialResourcesYT_DataPrep = list(whatToCombine = data.table::data.table(datasetName = c("oilGas", "oilGas", 
-                                                                                              "mining", "mining"),
-                               dataClasses = c("potentialOilGas", "potentialOilGas", 
-                                               "potentialMining", "potentialMining"),
-                               toDifferentiate = c(NA, "C2H4_BCR6_NT1", 
-                                                   "CLAIM_STAT", "PERMIT_STA"),
-                               activeProcess = c(NA, NA, 
-                                                 "CLAIM_STAT", "PERMIT_STA")))
-)
-modules <- list("potentialResourcesYT_DataPrep")
-objects <- list()
-inputs <- list()
-outputs <- list()
+The full list of module inputs:
 
-disturbanceList <- simInitAndSpades(times = times, 
-                                    params = parameters, 
-                                    modules = modules,
-                                    objects = objects)
-```
-
-# Parameters
-
-This module has one parameter that can be adjusted by the user:  
-- `whatToCombine`: This is a data.table and defaults to:  
-
-``` {r whatToCombine, eval = TRUE}
-
-DT <- data.table::data.table(datasetName = c("oilGas", "oilGas", "mining", "mining"),
-                               dataClasses = c("potentialOilGas", "potentialOilGas", 
-                                               "potentialMining", "potentialMining"),
-                               toDifferentiate = c(NA, "C2H4_BCR6_NT1", "CLAIM_STAT", "PERMIT_STA"),
-                               activeProcess = c(NA, NA, "CLAIM_STAT", "PERMIT_STA"))
-print(DT)
-```
-
-Here the user should specify a data.table with the `dataName` and `dataClasses` from the object `disturbanceList` from the module `anthroDisturbance_DataPrep` to be combined. The table also contains a column identifying which to be used to filter active processes for mining (i.e., `CLAIM_STAT` and `PERMIT_STA`). For Oil/Gas, it needs to identify which layer is the potential one (C2H4_BCR6_NT1) and which is used to constrain where oil and gas will be added. For oil and gas, the other potential layer (exploration permits) is used as a starting point to add structures, followed by randomly placing them in the highest values of `C2H4_BCR6_NT1` and going down until the total amount is reached. For mining, `CLAIM_STAT` is the potential exploration, while `PERMIT_STA` are the ones that might become CLAIMS. The most likely values are `CLAIMS` and followed by `PERMITS`;  
-
-# Events
-
-This module contains four events, which are similar in objective, but specific in the inputs and outputs. All events (`createPotentialMining`, `createPotentialOilGas`, `createPotentialCutblocks`, `createPotentialSeismicLines` and `replaceInDisturbanceList`) aim at working on all current and potential disturbance layers, unifying these, and setting the highest values as the locations that need to be filled with new developments first, or prepare potential layers. An important note is that for the function `makePotentialCutblocks()`, we recreated the steps done by ENR (J. Hodson) to create the potential forest. Specific information can be found as comments in the function.  
-
-# Data dependencies
-
-## Defaults  
-
-This module can be run without any inputs from the user and will automatically default to an example in the Northwest Territories of Canada (i.e., union of BCR6 and NT1).
-
-## Input data
-
-The module expects three specific inputs: disturbanceList, studyArea and rasterToMatch:
-
-- `disturbanceList`: List (general category or sector) of lists (specific class or sub-sector) needed for generating disturbances. The sub-sector last list contains:     
-  + Outter list's names: `dataName` from `disturbanceDT`;  
-  + Inner list's names: `dataClass` from disturbanceDT, which is a unique class after harmozining, except for any potential resources that need idiosyncratic processing. This  means that each combination of `dataName` and `dataClass` (except for 'potential') will only have only one element;  
-
-The other two inputs needed by this module are the the study area (`studyArea`) and a raster (`rasterToMatch`) that matches the study area and provides the spatial resolution for the simulations.  
-
-```{r moduleInputs}
-df_inputs <- SpaDES.core::moduleInputs("potentialResourcesYT_DataPrep", moduleDir)
+```{r moduleInputs-potentialResourcesYT_DataPrep, echo = FALSE, eval = TRUE, message = FALSE, warning = FALSE}
+df_inputs <- SpaDES.core::moduleInputs("potentialResourcesYT_DataPrep", "..")
 knitr::kable(df_inputs)
 ```
 
-## Output data
+The main parameter is `whatToCombine`, a `data.table` naming the `dataName` /
+`dataClasses` from `disturbanceList` to combine, plus columns identifying how to
+filter active processes: for mining, `CLAIM_STAT` (potential exploration) and
+`PERMIT_STA` (permits that may become claims), with claims the most likely
+values; for oil/gas, the potential layer (`C2H4_BCR6_NT1`) provides values from
+which structures are placed highest-first, using exploration permits as a
+starting point. (These column names belong to the NWT sample data schema.)
 
-The module outputs only one object, the `disturbanceList`, which is a modified version of the input one, where multiple potential layers (i.e., mining and oilGas) have been replaced by only one layer, with the highest values being the ones that need to be filled with new developments first.  
+```{r moduleParams-potentialResourcesYT_DataPrep, echo = FALSE, eval = TRUE, message = FALSE, warning = FALSE}
+df_params <- SpaDES.core::moduleParams("potentialResourcesYT_DataPrep", "..")
+knitr::kable(df_params)
+```
 
-```{r moduleOutputs}
-df_outputs <- SpaDES.core::moduleOutputs("potentialResourcesYT_DataPrep", moduleDir)
+### Events
+
+After `init`, the module runs five events. Each works on the current and
+potential disturbance layers for a resource type, unifying them and setting the
+highest values as the locations to be developed first:
+
+- `createPotentialMining`;
+- `createPotentialOilGas`;
+- `createPotentialSeismicLines`;
+- `createPotentialCutblocks` -- reproduces the steps used by ENR (J. Hodson) to
+  build the potential forest layer (details in `makePotentialCutblocks()`);
+- `replaceInDisturbanceList` -- writes the harmonized potential layers back into
+  `disturbanceList`.
+
+### Plotting
+
+This module does not schedule any plot events.
+
+### Saving
+
+This module does not schedule any save events.
+
+### Module outputs
+
+```{r moduleOutputs-potentialResourcesYT_DataPrep, echo = FALSE, eval = TRUE, message = FALSE, warning = FALSE}
+df_outputs <- SpaDES.core::moduleOutputs("potentialResourcesYT_DataPrep", "..")
 knitr::kable(df_outputs)
 ```
 
-# Links to other modules
+`disturbanceList` is the modified input, with multiple potential layers (e.g.,
+mining and oilGas) replaced by a single prioritized layer; `potentialOilGas` is
+the harmonized oil/gas potential layer used downstream as the starting point for
+placing new oil and gas structures.
 
-This module can be combined primarily with `anthroDisturbance_DataPrep` and `anthroDisturbance_Generator`, both modules being generic and applicable in other contexts, potentially without modifications. Such module collection can also be used in combination with (a) landscape simulation module(s) (i.e., LandR) and caribou modules (i.e., caribouRSF, caribouRSF_NT, caribouPopGrowth) to improve realism on simulated landscape and caribou RSF and population growth forecasts.
+### Links to other modules
 
+Part of the anthropogenic-disturbance module collection: run after
+`anthroDisturbance_DataPrep` and before `anthroDisturbance_Generator`. The
+collection combines with landscape-simulation modules (e.g., `Biomass_core`) and
+caribou modules to improve realism in forecasts.
+
+### Getting help
+
+- <https://github.com/FOR-CAST/potentialResourcesYT_DataPrep/issues>

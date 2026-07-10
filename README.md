@@ -1,3 +1,1 @@
-# Overview
-
-This is a data-preparation module that harmonizes anthropogenic disturbance datasets (mining and oil/gas) into standardized "potential" layers, where higher values flag places more likely to see future development. It was originally developed for the Northwest Territories by Tati Micheletti; this is the FOR-CAST fork adapted for the Yukon Northern Mountain Caribou project. The approach is idiosyncratic and NOT generalizable, but serves as a basis for other development types. Note the built-in defaults still reference the original NWT sample data; the pipeline supplies Yukon inputs.
+potentialResourcesYT_DataPrep.md

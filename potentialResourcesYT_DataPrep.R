@@ -90,13 +90,13 @@ defineModule(sim, list(
                                " will only have only one element."), 
                  sourceURL = "https://drive.google.com/file/d/1v7MpENdhspkWxHPZMlmx9UPCGFYGbbYm/view?usp=sharing"),
     expectsInput(objectName = "studyArea", 
-                 objectClass = "SpatialPolygonDataFrame|vect", 
+                 objectClass = "SpatVector", 
                  desc = paste0("Study area to which the module should be ",
                                "constrained to. Defaults to NT1+BCR6. Object ",
                                "can be of class 'vect' from terra package"), 
                  sourceURL = "https://zenodo.org/records/20434361/files/NT1_BCR6.zip"),
     expectsInput(objectName = "rasterToMatch", 
-                 objectClass = "RasterLayer|rast", 
+                 objectClass = "SpatRaster", 
                  desc = paste0("All spatial outputs will be reprojected and ",
                                "resampled to it. Defaults to NT1+BCR6. Object ",
                                "can be of class 'rast' from terra package"), 
@@ -113,7 +113,11 @@ defineModule(sim, list(
                                 "with new developments first, or prepare potential layers",
                                 " (i.e., potentialCutblocks).")),
     createsOutput(objectName = "potentialOilGas", objectClass = "list",
-                  desc = paste0("List (general category) of lists (specific "))
+                  desc = paste0("List (general category) of lists (specific class) ",
+                                "holding the harmonized oil/gas potential layer, where ",
+                                "higher values mark the locations most likely to be ",
+                                "developed first (the starting point for adding oil and ",
+                                "gas structures downstream)."))
   )
 ))
 
