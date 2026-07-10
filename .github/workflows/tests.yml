@@ -183,7 +183,7 @@ jobs:
             exit 0
           fi
           COVERAGE=$(grep -o '[0-9.]*' artifacts/tests/"$MODE"/coverage.txt | head -n1)
-          payload=$(jq -n --arg module "potentialResourcesNT_DataPrep" --arg mode "$MODE" --arg coverage "$COVERAGE" '{module:$module,mode:$mode,coverage:$coverage}')
+          payload=$(jq -n --arg module "potentialResourcesYT_DataPrep" --arg mode "$MODE" --arg coverage "$COVERAGE" '{module:$module,mode:$mode,coverage:$coverage}')
           curl -X POST \
             -H "Authorization: token $AGGREGATOR_TOKEN" \
             -H "Accept: application/vnd.github+json" \

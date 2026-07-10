@@ -5,17 +5,17 @@
 ## they are namespaced to the module, just like functions in R packages.
 ## If exact location is required, functions will be: `sim$.mods$<moduleName>$FunctionName`.
 defineModule(sim, list(
-  name = "potentialResourcesNT_DataPrep",
-  description =  paste0("This is a data preparation module to harmonize different",
-                        " anthropogenic disturbance datasets, more specifically, ",
-                        "mining and oil/gas. It's intended for the Northwest ",
-                        "Territories region (default) and is idyosyncratic.",
-                        "This means this module is NOT generalizable, but can ",
-                        "be used as basis for other types of development. The ",
-                        "objective is to create one standardized layer for each",
-                        " of the potential resources that has increasing values ",
-                        "for most prioritized places (i.e., higher values, more",
-                        " likely structures will appear)."),
+  name = "potentialResourcesYT_DataPrep",
+  description = paste0("Data-preparation module that harmonizes anthropogenic ",
+                       "disturbance datasets (mining and oil/gas) into standardized ",
+                       "'potential' layers, where higher values flag places more ",
+                       "likely to see future development. Originally developed for ",
+                       "the Northwest Territories by Tati Micheletti; this is the ",
+                       "FOR-CAST fork adapted for the Yukon Northern Mountain Caribou ",
+                       "project. The approach is idiosyncratic and NOT generalizable, ",
+                       "but serves as a basis for other development types. Note the ",
+                       "built-in defaults still reference the original NWT sample ",
+                       "data; the pipeline supplies Yukon inputs."),
   keywords = "",
   authors = structure(list(list(given = "Tati", 
                                 family = "Micheletti", role = c("aut", "cre"), 
@@ -23,11 +23,11 @@ defineModule(sim, list(
                                 comment = NULL)), 
                       class = "person"),  
   childModules = character(0),
-  version = list(potentialResourcesNT_DataPrep = "1.0.0"),
+  version = list(potentialResourcesYT_DataPrep = "1.0.0"),
   timeframe = as.POSIXlt(c(NA, NA)),
   timeunit = "year",
   citation = list("citation.bib"),
-  documentation = list("README.md", "potentialResourcesNT_DataPrep.Rmd"), ## same file
+  documentation = list("README.md", "potentialResourcesYT_DataPrep.Rmd"), ## same file
   reqdPkgs = list("crayon", "data.table", "ggplot2", "googledrive", "qs2", "RCurl",
                   "PredictiveEcology/reproducible", "SpaDES.core (>=1.0.10)", "stringi",
                   "terra", "tictoc", "zip"),
@@ -120,7 +120,7 @@ defineModule(sim, list(
 ## event types
 #   - type `init` is required for initialization
 
-doEvent.potentialResourcesNT_DataPrep = function(sim, eventTime, eventType) {
+doEvent.potentialResourcesYT_DataPrep = function(sim, eventTime, eventType) {
   switch(
     eventType,
     init = {
@@ -132,11 +132,11 @@ doEvent.potentialResourcesNT_DataPrep = function(sim, eventTime, eventType) {
                     "start before 2011 (unless allowPre2011 = TRUE)."))
       }
       # schedule future event(s)
-      sim <- scheduleEvent(sim, start(sim), "potentialResourcesNT_DataPrep", "createPotentialMining", eventPriority = 3)
-      sim <- scheduleEvent(sim, start(sim), "potentialResourcesNT_DataPrep", "createPotentialOilGas", eventPriority = 3)
-      sim <- scheduleEvent(sim, start(sim), "potentialResourcesNT_DataPrep", "createPotentialSeismicLines", eventPriority = 3)
-      sim <- scheduleEvent(sim, start(sim), "potentialResourcesNT_DataPrep", "createPotentialCutblocks", eventPriority = 3)
-      sim <- scheduleEvent(sim, start(sim), "potentialResourcesNT_DataPrep", "replaceInDisturbanceList", eventPriority = 3)
+      sim <- scheduleEvent(sim, start(sim), "potentialResourcesYT_DataPrep", "createPotentialMining", eventPriority = 3)
+      sim <- scheduleEvent(sim, start(sim), "potentialResourcesYT_DataPrep", "createPotentialOilGas", eventPriority = 3)
+      sim <- scheduleEvent(sim, start(sim), "potentialResourcesYT_DataPrep", "createPotentialSeismicLines", eventPriority = 3)
+      sim <- scheduleEvent(sim, start(sim), "potentialResourcesYT_DataPrep", "createPotentialCutblocks", eventPriority = 3)
+      sim <- scheduleEvent(sim, start(sim), "potentialResourcesYT_DataPrep", "replaceInDisturbanceList", eventPriority = 3)
     },
     createPotentialMining = {
       sim$potentialMining <- makePotentialMining(disturbanceList = sim$disturbanceList, 
