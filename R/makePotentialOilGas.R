@@ -1,6 +1,13 @@
 makePotentialOilGas <- function(disturbanceList, 
                                 whatToCombine){
-  
+
+  # whatToCombine asks for no oilGas layers (e.g. it only combines mining layers): nothing to build,
+  # whether or not the study area has oil and gas disturbances
+  if (!"oilGas" %in% whatToCombine[["datasetName"]]){
+    message("No potential for oil and gas in the study area: whatToCombine selects no oilGas layers. Returning NULL")
+    return(NULL)
+  }
+
   laysToWork <- disturbanceList[["oilGas"]][names(disturbanceList[["oilGas"]]) %in% 
                                               whatToCombine[datasetName == "oilGas", 
                                                             dataClasses]]
