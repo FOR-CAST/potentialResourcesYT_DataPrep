@@ -1,6 +1,6 @@
 potentialResourcesYT_DataPrep Manual
 ================
-Last updated: 2026-10-06
+Last updated: 2026-11-02
 
 - [potentialResourcesYT_DataPrep
   Module](#potentialresourcesyt_dataprep-module)
@@ -63,17 +63,17 @@ potential layer (`C2H4_BCR6_NT1`) provides values from which structures
 are placed highest-first, using exploration permits as a starting point.
 (These column names belong to the NWT sample data schema.)
 
-| paramName | paramClass | default | min | max | paramDesc |
-|:---|:---|:---|:---|:---|:---|
-| whatToCombine | data.table | c(“oilGa…. | NA | NA | Here the user should specify a data.table with the dataName and dataClasses from the object `disturbanceList` anthroDisturbance_DataPrep, first and (input from second levels) to be combined. The table also contains a column identifying which to be used to filter active processes for mining (CLAIM_STAT and PERMIT_STA) For Oil/Gas (it needs to identify which layer is the potential one (C2H4_BCR6_NT1) and which is used to constrain where oil and gas will be added. For oil and gas, the other potential layer (exploration permits) is used as a starting point to add structures, followed by randomly placing them in the highest values of C2H4_BCR6_NT1and going down until the total amount is reached. For mining, CLAIM_STAT is the potential exploration, while PERMIT_STA are the ones that might become CLAIMS. The most likely values are CLAIMS and followed by PERMITS. |
-| .plots | character | screen | NA | NA | Used by Plots function, which can be optionally used here |
-| .plotInitialTime | numeric | 0 | NA | NA | Describes the simulation time at which the first plot event should occur. |
-| .plotInterval | numeric | NA | NA | NA | Describes the simulation time interval between plot events. |
-| .saveInitialTime | numeric | NA | NA | NA | Describes the simulation time at which the first save event should occur. |
-| .saveInterval | numeric | NA | NA | NA | This describes the simulation time interval between save events. |
-| .seed | list |  | NA | NA | Named list of seeds to use for each event (names). |
-| .useCache | logical | FALSE | NA | NA | Should caching of events or module be used? |
-| allowPre2011 | logical | FALSE | NA | NA | If TRUE, allows simulations whose start time is before 2011. Intended for specialised validation runs where pre-2011 baselines are available. |
+| paramName | paramClass | default | min | max | paramDesc | cacheKey |
+|:---|:---|:---|:---|:---|:---|:---|
+| whatToCombine | data.table | c(“oilGa…. | NA | NA | Here the user should specify a data.table with the dataName and dataClasses from the object `disturbanceList` anthroDisturbance_DataPrep, first and (input from second levels) to be combined. The table also contains a column identifying which to be used to filter active processes for mining (CLAIM_STAT and PERMIT_STA) For Oil/Gas (it needs to identify which layer is the potential one (C2H4_BCR6_NT1) and which is used to constrain where oil and gas will be added. For oil and gas, the other potential layer (exploration permits) is used as a starting point to add structures, followed by randomly placing them in the highest values of C2H4_BCR6_NT1and going down until the total amount is reached. For mining, CLAIM_STAT is the potential exploration, while PERMIT_STA are the ones that might become CLAIMS. The most likely values are CLAIMS and followed by PERMITS. | TRUE |
+| .plots | character | screen | NA | NA | Used by Plots function, which can be optionally used here | TRUE |
+| .plotInitialTime | numeric | 0 | NA | NA | Describes the simulation time at which the first plot event should occur. | TRUE |
+| .plotInterval | numeric | NA | NA | NA | Describes the simulation time interval between plot events. | TRUE |
+| .saveInitialTime | numeric | NA | NA | NA | Describes the simulation time at which the first save event should occur. | TRUE |
+| .saveInterval | numeric | NA | NA | NA | This describes the simulation time interval between save events. | TRUE |
+| .seed | list |  | NA | NA | Named list of seeds to use for each event (names). | TRUE |
+| .useCache | logical | FALSE | NA | NA | Should caching of events or module be used? | TRUE |
+| allowPre2011 | logical | FALSE | NA | NA | If TRUE, allows simulations whose start time is before 2011. Intended for specialised validation runs where pre-2011 baselines are available. | TRUE |
 
 ### Events
 
