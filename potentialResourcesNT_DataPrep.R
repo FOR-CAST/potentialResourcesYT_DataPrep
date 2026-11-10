@@ -30,7 +30,7 @@ defineModule(sim, list(
   documentation = list("README.md", "potentialResourcesNT_DataPrep.Rmd"), ## same file
   reqdPkgs = list("SpaDES.core (>=1.0.10)", "ggplot2", 
                   "PredictiveEcology/reproducible",
-                  "raster", "terra", "crayon", "data.table", "RCurl",
+                  "terra", "crayon", "data.table", "RCurl",
                   "tictoc"),
   parameters = rbind(
     #defineParameter("paramName", "paramClass", value, min, max, "parameter description"),
