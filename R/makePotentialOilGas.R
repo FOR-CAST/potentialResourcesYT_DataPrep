@@ -62,12 +62,12 @@ makePotentialOilGas <- function(disturbanceList,
                     "creation but this was missed before. Please debug!"))
       } else {
         # !pot !claim
-        stop(paste0("No existing mining (i.e., claim ) disturbance NEITHER",
+        stop(paste0("No existing oil and gas disturbance NEITHER ",
                     "potential in the study area. At least one potential ",
                     "layer is necessary for the analysis. If you are supplying ",
-                    " potential layers, please keep this in mind. If you are ",
-                    "the deafult in the NT, your study area is outside of",
-                    "currently supported region for potential resources",
+                    "potential layers, please keep this in mind. If you are using ",
+                    "the default in the NT, your study area is outside of the ",
+                    "currently supported region for potential resources ",
                     "creation but this was missed before. Please debug!"))
       }
     }
