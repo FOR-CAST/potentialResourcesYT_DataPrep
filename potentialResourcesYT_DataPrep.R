@@ -29,9 +29,9 @@ defineModule(sim, list(
   timeunit = "year",
   citation = list("citation.bib"),
   documentation = list("README.md", "potentialResourcesYT_DataPrep.Rmd"), ## same file
-  reqdPkgs = list("crayon", "data.table", "ggplot2", "googledrive", "qs2", "RCurl",
-                  "PredictiveEcology/reproducible", "SpaDES.core (>=1.0.10)", "stringi",
-                  "terra", "tictoc", "zip"),
+  reqdPkgs = list("crayon", "data.table", "ggplot2", "RCurl",
+                  "PredictiveEcology/reproducible", "SpaDES.core (>=1.0.10)",
+                  "terra", "tictoc"),
   parameters = rbind(
     #defineParameter("paramName", "paramClass", value, min, max, "parameter description"),
     defineParameter("whatToCombine", "data.table", 
