@@ -1,6 +1,6 @@
 potentialResourcesYT_DataPrep Manual
 ================
-Last updated: 2026-11-02
+Last updated: 2026-11-10
 
 - [potentialResourcesYT_DataPrep
   Module](#potentialresourcesyt_dataprep-module)
@@ -50,7 +50,7 @@ The full list of module inputs:
 
 | objectName | objectClass | desc | sourceURL |
 |:---|:---|:---|:---|
-| disturbanceList | list | List (general category) of lists (specific class) needed for generating disturbances. This last list contains: Outter list names: dataName from disturbanceDTInner list names: dataClass from disturbanceDT, which is a unique class after harmozining, except for any potential resources that need idiosyncratic processing. This means that each combination of dataName and dataClass (except for ‘potential’) will only have only one element. | <https://drive.google.com/file/d/1v7MpENdhspkWxHPZMlmx9UPCGFYGbbYm/view?usp=sharing> |
+| disturbanceList | list | List (general category) of lists (specific class) needed for generating disturbances. This last list contains: Outter list names: dataName from disturbanceDTInner list names: dataClass from disturbanceDT, which is a unique class after harmozining, except for any potential resources that need idiosyncratic processing. This means that each combination of dataName and dataClass (except for ‘potential’) will only have only one element. | <https://zenodo.org/records/20628704/files/disturbanceList.zip> |
 | studyArea | SpatVector | Study area to which the module should be constrained to. Defaults to NT1+BCR6. Object can be of class ‘vect’ from terra package | <https://zenodo.org/records/20434361/files/NT1_BCR6.zip> |
 | rasterToMatch | SpatRaster | All spatial outputs will be reprojected and resampled to it. Defaults to NT1+BCR6. Object can be of class ‘rast’ from terra package | <https://zenodo.org/records/20434240/files/RTM_BCR6_NT1.tif> |
 
