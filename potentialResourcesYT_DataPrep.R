@@ -24,14 +24,14 @@ defineModule(sim, list(
            email = "achubaty@for-cast.ca")
   ),  
   childModules = character(0),
-  version = list(potentialResourcesYT_DataPrep = "1.0.0"),
+  version = list(potentialResourcesYT_DataPrep = "1.2.1"),
   timeframe = as.POSIXlt(c(NA, NA)),
   timeunit = "year",
   citation = list("citation.bib"),
   documentation = list("README.md", "potentialResourcesYT_DataPrep.Rmd"), ## same file
-  reqdPkgs = list("crayon", "data.table", "ggplot2", "googledrive", "qs2", "RCurl",
-                  "PredictiveEcology/reproducible", "SpaDES.core (>=1.0.10)", "stringi",
-                  "terra", "tictoc", "zip"),
+  reqdPkgs = list("crayon", "data.table", "ggplot2", "RCurl",
+                  "PredictiveEcology/reproducible", "SpaDES.core (>=1.0.10)",
+                  "terra", "tictoc"),
   parameters = rbind(
     #defineParameter("paramName", "paramClass", value, min, max, "parameter description"),
     defineParameter("whatToCombine", "data.table", 
@@ -89,7 +89,7 @@ defineModule(sim, list(
                                " processing. This  means that each combination ",
                                "of dataName and dataClass (except for 'potential')",
                                " will only have only one element."), 
-                 sourceURL = "https://drive.google.com/file/d/1v7MpENdhspkWxHPZMlmx9UPCGFYGbbYm/view?usp=sharing"),
+                 sourceURL = "https://zenodo.org/records/20628704/files/disturbanceList.zip"),
     expectsInput(objectName = "studyArea", 
                  objectClass = "SpatVector", 
                  desc = paste0("Study area to which the module should be ",
