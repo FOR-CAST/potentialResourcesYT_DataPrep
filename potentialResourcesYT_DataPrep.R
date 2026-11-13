@@ -29,7 +29,7 @@ defineModule(sim, list(
   timeunit = "year",
   citation = list("citation.bib"),
   documentation = list("README.md", "potentialResourcesYT_DataPrep.Rmd"), ## same file
-  reqdPkgs = list("crayon", "data.table", "ggplot2", "RCurl",
+  reqdPkgs = list("FOR-CAST/anthroDisturbanceUtils", "crayon", "data.table", "ggplot2", "RCurl",
                   "PredictiveEcology/reproducible", "SpaDES.core (>=1.0.10)",
                   "terra", "tictoc"),
   parameters = rbind(
@@ -162,11 +162,14 @@ doEvent.potentialResourcesYT_DataPrep = function(sim, eventTime, eventType) {
       sim$potentialCutblocks <- makePotentialCutblocks(disturbanceList = sim$disturbanceList)
     },
     replaceInDisturbanceList = {
-      sim$disturbanceList <- replaceList(disturbanceList = sim$disturbanceList,
-                                         potentialOil = sim$potentialOilGas,
-                                         potentialMining = sim$potentialMining,
-                                         potentialCutblocks = sim$potentialCutblocks,
-                                         potentialSeismicLines = sim$potentialSeismicLines)
+      # Seismic lines belong to the oil and gas sector
+      newLayers <- list(
+        oilGas = list(potentialOilGas = sim$potentialOilGas,
+                      potentialSeismicLines = sim$potentialSeismicLines),
+        mining = list(potentialMining = sim$potentialMining),
+        forestry = list(potentialCutblocks = sim$potentialCutblocks)
+      )
+      sim$disturbanceList <- anthroDisturbanceUtils::replaceLayers(sim$disturbanceList, newLayers)
     },
     warning(paste("Undefined event type: \'", current(sim)[1, "eventType", with = FALSE],
                   "\' in module \'", current(sim)[1, "moduleName", with = FALSE], "\'", sep = ""))
@@ -199,8 +202,8 @@ doEvent.potentialResourcesYT_DataPrep = function(sim, eventTime, eventType) {
   }
   
   if (!suppliedElsewhere(object = "disturbanceList", sim = sim)) {
-    sim$disturbanceList <- unwrapTerraList(terraList = extractURL("disturbanceList"), 
-                                           generalPath = dPath)
+    sim$disturbanceList <- anthroDisturbanceUtils::unwrapTerraList(terraList = extractURL("disturbanceList"), 
+                                                                   generalPath = dPath)
     
     warning(paste0("disturbanceList was not supplied. The current should only ",
                    " be used for module testing purposes! Please run the module ",
